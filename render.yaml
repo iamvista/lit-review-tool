@@ -1,13 +1,15 @@
 services:
   - type: web
     name: litreview-backend
-    env: python
+    runtime: python
     region: oregon
     plan: free
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: FLASK_ENV
         value: production
       - key: DATABASE_URL
@@ -20,4 +22,3 @@ services:
         sync: false
       - key: CORS_ORIGINS
         value: http://localhost:5173
-    healthCheckPath: /
