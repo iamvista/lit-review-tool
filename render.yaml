@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: litreview-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd backend
+      python app.py
+    envVars:
+      - key: PORT
+        value: 5001
+      - key: DATABASE_URL
+        value: sqlite:////opt/render/project/src/backend/instance/litreview.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: http://localhost:5173
+    healthCheckPath: /

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 資料庫
+  db:
+    image: postgres:15-alpine
+    container_name: litreview-db
+    environment:
+      POSTGRES_USER: litreview
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: litreview_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litreview"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Flask 後端
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: litreview-backend
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://litreview:password@db:5432/litreview_db
+      SECRET_KEY: dev-secret-key-change-in-production
+      JWT_SECRET_KEY: jwt-dev-secret-key-change-in-production
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+      PORT: 5001
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python app.py
+
+  # React 前端
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: litreview-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5001
+
+volumes:
+  postgres_data:

@@ -1,0 +1,45 @@
+# Flask 核心
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-JWT-Extended==4.6.0
+Flask-CORS==4.0.0
+Flask-Migrate==4.0.5
+
+# 資料庫
+psycopg[binary]==3.2.13
+psycopg2-binary==2.9.9
+
+# Web 伺服器
+gunicorn==21.2.0
+
+# 密碼加密
+bcrypt==4.1.2
+cryptography==42.0.0
+
+# HTTP 請求
+requests==2.31.0
+
+# 環境變數
+python-dotenv==1.0.0
+
+# 文獻解析
+bibtexparser==1.4.1
+PyPDF2==3.0.1
+
+# 學術搜尋
+scholarly==1.7.11
+habanero==1.2.6
+arxiv==2.1.0
+
+# 網絡分析
+networkx==3.2.1
+
+# AI 分析
+anthropic==0.34.0
+
+# 文件匯出
+python-docx==1.1.0
+markdown2==2.4.12
+
+# 工具
+python-dateutil==2.8.2
