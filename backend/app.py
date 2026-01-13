@@ -139,8 +139,10 @@ def create_app(config_name=None):
     return app
 
 
+# 創建應用實例（用於 gunicorn 等生產伺服器）
+app = create_app(os.environ.get('FLASK_ENV', 'development'))
+
 # 用於開發環境直接運行
 if __name__ == '__main__':
-    app = create_app('development')
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
